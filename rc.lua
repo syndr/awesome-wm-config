@@ -64,7 +64,7 @@ customization.option = {}
 customization.timer = {}
 customization.widgets = {}
 
-customization.config.version = "4.0.34"
+customization.config.version = "4.0.35"
 customization.config.help_url = "https://github.com/pw4ever/awesome-wm-config/tree/" .. customization.config.version
 
 customization.default.property = {
@@ -84,7 +84,7 @@ customization.default.property = {
 
 customization.default.compmgr = 'picom'
 customization.default.compmgr_args = '-b --unredir-if-possible --no-fading-openclose'
-customization.default.wallpaper_change_interval = 15
+customization.default.wallpaper_change_interval = 3600
 
 customization.option.wallpaper_change_p = true
 customization.option.launch_compmgr_p = true
@@ -239,7 +239,7 @@ do
         beautiful.init(theme_path)
     end
 
-    init_theme("zenburn")
+    init_theme("SciFi")
 
     awful.spawn.with_shell("hsetroot -solid '#000000'")
 
@@ -301,8 +301,8 @@ tools.browser.secondary_private = tools.browser.secondary .. " --private"
 --tools.browser.secondary = "firefox"
 --tools.browser.secondary_private = tools.browser.secondary .. " --private"
 
-tools.editor.primary = "gvim"
-tools.editor.secondary = "emacs"
+tools.editor.primary = "nvim-qt"
+tools.editor.secondary = "gedit"
 
 -- alternative: override
 --tools.editor.primary = "nvim-qt"
@@ -380,7 +380,7 @@ end
 -- {{{ Customized functions
 
 customization.func.system_lock = function ()
-    awful.util.spawn("xfce4-screensaver-command -l")
+    awful.util.spawn("xscreensaver-command -lock")
 end
 
 customization.func.system_screen_off = function ()
@@ -1993,9 +1993,11 @@ function(s)
     if s == capi.screen.primary then
         customization.widgets.wibox_top[s].visible = true
         customization.widgets.wibox_top_compact[s].visible = false
+        customization.widgets.wibox_bottom[s].visible = false
     else
         customization.widgets.wibox_top[s].visible = false
         customization.widgets.wibox_top_compact[s].visible = true
+        customization.widgets.wibox_bottom[s].visible = false
     end
 
     customization.widgets.wibox_bottom[s]:setup {
@@ -2680,7 +2682,7 @@ nil
 --- operation
 clientkeys = awful.util.table.join(
 
-awful.key({ modkey, "Shift"   }, "c", customization.func.client_kill),
+awful.key({ modkey,           }, "q", customization.func.client_kill),
 
 awful.key({ "Mod1",   }, "F4", customization.func.client_kill),
 

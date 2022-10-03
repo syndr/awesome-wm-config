@@ -42,11 +42,9 @@
 
 # [awesome Window Manager][awesome] configuration
 
-Please use the branch that **matches your Awesome version**:
-* [Awesome 3.x](https://github.com/pw4ever/awesome-wm-config/tree/awesome-3.x).
-* [Awesome 4.x](https://github.com/pw4ever/awesome-wm-config/tree/awesome-4.x).
+This is my fork of [pw4ever's fantastic Awesome WM config](https://github.com/pw4ever/awesome-wm-config).  All credit for the original configuration goes to them.
 
-<img alt="a screenshot of it in action" src="https://raw.githubusercontent.com/pw4ever/awesome-wm-config/master/screenshot/pengw-awesome-screenshot-20150215.png" width="960px" />
+<img alt="a screenshot of it in action" src="https://github.com/syndr/awesome-wm-config/blob/dc41125e4b0695be6000b86617c5c11d764e58b0/screenshot/pengw-awesome-screenshot-20150215.png" width="960px" />
 
 ## intro
 
@@ -85,7 +83,7 @@ This repo holds my *personal* take of [awesome][awesome]'s configuration. Hightl
 * Install [awesome][awesome] with your preferred package manager. Example: `sudo pacman -S awesome --needed --noconfirm` on [Arch Linux][archlinux].
 * Clone this repo to `$HOME/.config/awesome`.
 ```bash
-cd $HOME/.config && git clone https://github.com/pw4ever/awesome-wm-config.git awesome
+cd $HOME/.config && git clone https://github.com/syndr/awesome-wm-config.git awesome
 ```
 * Setup .xinitrc or Display Manager accordingly.
 
