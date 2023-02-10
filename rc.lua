@@ -86,7 +86,7 @@ customization.default.compmgr = 'picom'
 customization.default.compmgr_args = '-b --unredir-if-possible --no-fading-openclose'
 customization.default.wallpaper_change_interval = 3600
 
-customization.option.wallpaper_change_p = true
+customization.option.wallpaper_change_p = false
 customization.option.launch_compmgr_p = true
 customization.option.tag_persistent_p = true
 customization.option.low_battery_notification_p = true
@@ -2130,7 +2130,9 @@ awful.button({ }, 1, customization.func.all_clients),
 awful.button({ }, 2, customization.func.tag_action_menu),
 awful.button({ }, 3, function () mymainmenu:toggle() end),
 awful.button({ }, 4, awful.tag.viewprev),
-awful.button({ }, 5, awful.tag.viewprev)
+awful.button({ }, 5, awful.tag.viewprev),
+awful.button({ }, 11, awful.tag.viewnext),
+awful.button({ }, 12, awful.tag.viewprev)
 ))
 -- }}}
 notifylist = {}
@@ -2278,12 +2280,13 @@ awful.key({modkey}, "F2", function()
 end),
 
 awful.key({modkey}, "r", function()
-    awful.prompt.run(
-    {prompt = "Run: "},
-    customization.widgets.promptbox[awful.screen.focused()].widget,
-    awful.util.spawn, awful.completion.shell,
-    awful.util.getdir("cache") .. "/history"
-    )
+    -- awful.prompt.run(
+    -- {prompt = "Run: "},
+    -- customization.widgets.promptbox[awful.screen.focused()].widget,
+    -- awful.util.spawn, awful.completion.shell,
+    -- awful.util.getdir("cache") .. "/history"
+    -- )
+    awful.spawn("rofi -show run")
 end),
 
 awful.key({modkey}, "F3", function()
@@ -2311,6 +2314,10 @@ awful.key({ modkey, }, ";", function()
   if c then
     customization.func.client_action_menu(c)
   end
+end),
+
+awful.key({ "Mod1", }, "Tab", function ()
+    awful.spawn("rofi -show window")
 end),
 
 awful.key({ modkey, "Shift" }, ";", customization.func.tag_action_menu),
