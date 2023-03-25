@@ -115,14 +115,14 @@ function util.tag.rename(tag, newp)
     if not t then return end
     local scr = t.screen or awful.screen.focused()
     if not scr then return end
-    local bg = nil
-    local fg = nil
+    local bg = "#5beb5b"
+    local fg = "#000000"
     local text = t.name
     local before = t.name
 
     if t == scr.selected_tag then
-        bg = theme.bg_focus or '#535d6c'
-        fg = theme.fg_urgent or '#ffffff'
+        bg = theme.tag_bg_focus or '#535d6c'
+        fg = theme.tag_fg_urgent or '#ffffff'
     else
         bg = theme.bg_normal or '#222222'
         fg = theme.fg_urgent or '#ffffff'

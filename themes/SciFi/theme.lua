@@ -44,9 +44,15 @@ theme.fg_focus      = "#111111"
 theme.fg_urgent     = "#66DD00"
 theme.fg_minimize   = "#66DD00"
 
+theme.tag_bg_focus  = "#5beb5b"
+theme.tag_fg_urgent = "#000000"
+
+theme.hotkeys_bg    = "#000000"
+theme.hotkeys_fg    = "#00FF00"
+
 theme.useless_gap   = dpi(5)
-theme.border_width  = dpi(0)
-theme.border_normal = theme.fg_focus
+theme.border_width  = dpi(1)
+theme.border_normal = "#02bf02"
 theme.border_focus  = theme.fg_normal
 theme.border_marked = xrdb.color3
 

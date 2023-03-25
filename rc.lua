@@ -22,6 +22,9 @@ local beautiful = require("beautiful")
 local naughty = require("naughty")
 local menubar = require("menubar")
 local hotkeys_popup = require("awful.hotkeys_popup").widget
+-- Enable hotkeys help widget for VIM and other apps
+-- when client with a matching name is opened:
+require("awful.hotkeys_popup.keys")
 local xrandr = require("xrandr")
 local foggy = require("foggy")
 
@@ -290,10 +293,10 @@ tools.system.filemanager.primary = tools.terminal .. " -e ranger"
 tools.system.filemanager.secondary = "pcmanfm"
 tools.system.taskmanager = "xfce4-taskmanager"
 
-tools.browser.primary = "chromium"
-tools.browser.primary_private = tools.browser.primary .. " --incognito"
-tools.browser.secondary = "firefox"
-tools.browser.secondary_private = tools.browser.secondary .. " --private"
+tools.browser.primary = "firefox"
+tools.browser.primary_private = tools.browser.primary .. " --private"
+tools.browser.secondary = "google-chrome"
+tools.browser.secondary_private = tools.browser.secondary .. " --incognito"
 
 -- alternative: override
 --tools.browser.primary = "google-chrome-stable"
@@ -302,7 +305,7 @@ tools.browser.secondary_private = tools.browser.secondary .. " --private"
 --tools.browser.secondary_private = tools.browser.secondary .. " --private"
 
 tools.editor.primary = "nvim-qt"
-tools.editor.secondary = "gedit"
+tools.editor.secondary = "gnome-text-editor"
 
 -- alternative: override
 --tools.editor.primary = "nvim-qt"
@@ -344,7 +347,9 @@ local layouts =
 {
     awful.layout.suit.floating,
     awful.layout.suit.tile,
+    awful.layout.suit.tile.left,
     awful.layout.suit.fair,
+    awful.layout.suit.max,
     awful.layout.suit.max.fullscreen,
     awful.layout.suit.magnifier,
 }
@@ -451,7 +456,7 @@ customization.func.system_power_off = function ()
 end
 
 customization.func.app_finder = function ()
-    awful.util.spawn("xfce4-appfinder")
+    awful.util.spawn("rofi -show drun")
 end
 
 -- {{ client actions
@@ -1603,6 +1608,9 @@ mymainmenu = awful.menu({
   }
 })
 
+-- Separator
+customization.widgets.separator = wibox.widget.textbox(" │ ")
+
 -- Keyboard map indicator and switcher
 customization.widgets.keyboardlayout = awful.widget.keyboardlayout()
 
@@ -1624,7 +1632,7 @@ customization.widgets.launcher = awful.widget.launcher({
 -- vicious widgets: http://awesome.naquadah.org/wiki/Vicious
 
 customization.widgets.cpuusage = wibox.widget.graph()
-customization.widgets.cpuusage:set_background_color("#494B4F")
+customization.widgets.cpuusage:set_background_color("#10140f")
 customization.widgets.cpuusage:set_color({
   type = "linear", from = { 0, 0 }, to = { 10,0 },
   stops = { {0, "#FF5656"}, {0.5, "#88A175"}, {1, "#AECF96" }}})
@@ -1932,9 +1940,17 @@ function(s)
 
     -- Create a textbox showing current universal argument
     customization.widgets.uniarg[s] = wibox.widget.textbox()
+
+    -- Add settings to make tasklist fixed width per button
+    local common = require("awful.widget.common")
+    local function list_update(w, buttons, label, data, objects)
+        common.list_update(w, buttons, label, data, objects)
+        w:set_max_widget_size(300)
+    end
+
     -- Create a tasklist widget
     customization.widgets.tasklist[s] = awful.widget.tasklist(
-        s, awful.widget.tasklist.filter.currenttags, customization.widgets.tasklist.buttons
+        s, awful.widget.tasklist.filter.currenttags, customization.widgets.tasklist.buttons, nil, list_update, wibox.layout.flex.horizontal()
         )
 
     -- Create the wibox
@@ -1947,21 +1963,29 @@ function(s)
         { -- Left widgets
             layout = wibox.layout.fixed.horizontal,
             customization.widgets.launcher,
+            customization.widgets.separator,
             customization.widgets.taglist[s],
+            customization.widgets.separator,
             customization.widgets.uniarg[s],
             customization.widgets.promptbox[s],
+            customization.widgets.separator,
         },
         customization.widgets.tasklist[s], -- Middle widget
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
+            customization.widgets.separator,
             customization.widgets.keyboardlayout,
             wibox.widget.systray(),
+            customization.widgets.separator,
             customization.widgets.cpuusage,
             customization.widgets.memusage,
-            customization.widgets.bat,
-            customization.widgets.mpdstatus,
+            customization.widgets.separator,
+            --customization.widgets.bat,
+            --customization.widgets.mpdstatus,
             customization.widgets.volume,
+            customization.widgets.separator,
             customization.widgets.date,
+            customization.widgets.separator,
             customization.widgets.layoutbox[s],
         },
     }
@@ -1971,21 +1995,28 @@ function(s)
         { -- Left widgets
             layout = wibox.layout.fixed.horizontal,
             customization.widgets.launcher,
+            customization.widgets.separator,
             customization.widgets.taglist[s],
+            customization.widgets.separator,
             customization.widgets.uniarg[s],
             customization.widgets.promptbox[s],
+            customization.widgets.separator,
         },
         customization.widgets.tasklist[s], -- Middle widget
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
             --customization.widgets.keyboardlayout,
             --wibox.widget.systray(),
-            --customization.widgets.cpuusage,
-            --customization.widgets.memusage,
+            customization.widgets.separator,
+            customization.widgets.cpuusage,
+            customization.widgets.memusage,
             --customization.widgets.bat,
             --customization.widgets.mpdstatus,
-            --customization.widgets.volume,
-            --customization.widgets.date,
+            customization.widgets.separator,
+            customization.widgets.volume,
+            customization.widgets.separator,
+            customization.widgets.date,
+            customization.widgets.separator,
             customization.widgets.layoutbox[s],
         },
     }
@@ -2131,8 +2162,8 @@ awful.button({ }, 2, customization.func.tag_action_menu),
 awful.button({ }, 3, function () mymainmenu:toggle() end),
 awful.button({ }, 4, awful.tag.viewprev),
 awful.button({ }, 5, awful.tag.viewprev),
-awful.button({ }, 11, awful.tag.viewnext),
-awful.button({ }, 12, awful.tag.viewprev)
+awful.button({ }, 10, awful.tag.viewnext),
+awful.button({ }, 11, awful.tag.viewprev)
 ))
 -- }}}
 notifylist = {}
@@ -2280,13 +2311,11 @@ awful.key({modkey}, "F2", function()
 end),
 
 awful.key({modkey}, "r", function()
-    -- awful.prompt.run(
-    -- {prompt = "Run: "},
-    -- customization.widgets.promptbox[awful.screen.focused()].widget,
-    -- awful.util.spawn, awful.completion.shell,
-    -- awful.util.getdir("cache") .. "/history"
-    -- )
     awful.spawn("rofi -show run")
+end),
+
+awful.key({modkey}, "BackSpace", function()
+    awful.spawn("rofi -show drun")
 end),
 
 awful.key({modkey}, "F3", function()
@@ -2913,15 +2942,29 @@ for i = 1, 10 do
     )
 end
 
+-- Mouse buttons that work anywhere on the screen
 clientbuttons = awful.util.table.join(
-awful.button({ }, 1, function (c)
-  if awful.client.focus.filter(c) then
-    client.focus = c
-    c:raise()
-  end
-end),
-awful.button({ modkey }, 1, awful.mouse.client.move),
-awful.button({ modkey }, 3, awful.mouse.client.resize))
+    awful.button({ }, 1, function (c)
+        if awful.client.focus.filter(c) then
+            client.focus = c
+            c:raise()
+        end
+    end),
+    awful.button({ modkey }, 1, awful.mouse.client.move),
+    awful.button({ modkey }, 3, awful.mouse.client.resize),
+
+    -- Allow switching workspaces with extra mouse function buttons
+    awful.button({ }, 11, 
+        function()
+            awful.tag.viewnext(screen[mouse.screen])
+        end
+        ),
+    awful.button({ }, 10, 
+        function()
+            awful.tag.viewprev(screen[mouse.screen])
+        end
+        )
+    )
 
 -- Set keys
 root.keys(globalkeys)
