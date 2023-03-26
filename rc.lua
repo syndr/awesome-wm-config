@@ -2170,8 +2170,8 @@ awful.button({ }, 2, customization.func.tag_action_menu),
 awful.button({ }, 3, function () mymainmenu:toggle() end),
 awful.button({ }, 4, awful.tag.viewprev),
 awful.button({ }, 5, awful.tag.viewprev),
-awful.button({ }, 10, awful.tag.viewnext),
-awful.button({ }, 11, awful.tag.viewprev)
+awful.button({ }, 11, awful.tag.viewnext),
+awful.button({ }, 10, awful.tag.viewprev)
 ))
 -- }}}
 notifylist = {}
@@ -2962,12 +2962,12 @@ clientbuttons = awful.util.table.join(
     awful.button({ modkey }, 3, awful.mouse.client.resize),
 
     -- Allow switching workspaces with extra mouse function buttons
-    awful.button({ }, 10, 
+    awful.button({ }, 11, 
         function()
             awful.tag.viewnext(screen[mouse.screen])
         end
         ),
-    awful.button({ }, 11, 
+    awful.button({ }, 10, 
         function()
             awful.tag.viewprev(screen[mouse.screen])
         end
