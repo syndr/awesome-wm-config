@@ -40,6 +40,9 @@ local util = require("util")
 -- universal arguments
 local uniarg = require("uniarg")
 
+-- Use freedesktop for menu stuff
+local freedesktop   = require("freedesktop")
+
 local capi = {
     tag = tag,
     screen = screen,
@@ -1581,12 +1584,17 @@ myawesomemenu = {
     { "forcibly quit", function () customization.orig.quit() end },
 }
 
+myallappsmenu = freedesktop.menu.build({
+    icon_size = beautiful.menu_height or 16,
+})
+
 mymainmenu = awful.menu({
   theme = { width=150, },
   items = {
     { "&system", mysystemmenu },
     { "app &finder", customization.func.app_finder },
-    { "&apps", myapp },
+    { "my&apps", myapp },
+    { "all a&pps", myallappsmenu },
     { "&terminal", tools.terminal },
     { "a&wesome", myawesomemenu, beautiful.awesome_icon },
     { "&client action", function ()
@@ -2541,7 +2549,7 @@ uniarg:key_repeat({ modkey, "Shift", "Ctrl", }, "b", function ()
 end),
 
 uniarg:key_repeat({ modkey, }, "v", function ()
-    awful.util.spawn("clipmenu")
+    awful.util.spawn("copyq show")
 end),
 
 uniarg:key_repeat({ modkey, "Mod1", }, "v", function ()
@@ -2954,12 +2962,12 @@ clientbuttons = awful.util.table.join(
     awful.button({ modkey }, 3, awful.mouse.client.resize),
 
     -- Allow switching workspaces with extra mouse function buttons
-    awful.button({ }, 11, 
+    awful.button({ }, 10, 
         function()
             awful.tag.viewnext(screen[mouse.screen])
         end
         ),
-    awful.button({ }, 10, 
+    awful.button({ }, 11, 
         function()
             awful.tag.viewprev(screen[mouse.screen])
         end
@@ -3000,6 +3008,13 @@ awful.rules.rules = {
 
     {
         rule = { class = "gimp" },
+        properties = {
+            floating = true,
+        },
+    },
+
+    {
+        rule = { class = "copyq" },
         properties = {
             floating = true,
         },
@@ -3057,6 +3072,7 @@ client.connect_signal("manage", function (c, startup)
         if not c.size_hints.user_position and not c.size_hints.program_position then
             awful.placement.no_overlap(c)
             awful.placement.no_offscreen(c)
+            awful.placement.under_mouse(c)
         end
     end
 
@@ -3157,6 +3173,9 @@ end
 -- XDG style autostart with "dex"
 -- HACK continue
 awful.spawn.with_shell("if ! [ -e " .. awesome_autostart_once_fname .. " ]; then dex -a; touch " .. awesome_autostart_once_fname .. "; fi")
+
+-- Run the bash startup script
+awful.spawn.with_shell("~/bin/launchStartupApps")
 
 if customization.option.launch_compmgr_p then
     customization.func.client_opaque_on(nil) -- start xcompmgr
