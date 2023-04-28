@@ -26,8 +26,9 @@ theme.font          = "terminus 8"
 --theme.bg_systray    = theme.bg_normal
 
 theme.bg_normal     = "#000000"
-theme.bg_focus      = "#00FF00"
---theme.bg_focus      = "#19FFFF" -- For tron-like colors
+theme.bg_focus      = "#00FF00"  -- Green terminal colors
+--theme.bg_focus      = "#339933"  -- Greenish
+--theme.bg_focus      = "#19FFFF" -- For blue tron-like colors
 theme.bg_urgent     = "#FFFF00"
 theme.bg_minimize   = "#444444"
 theme.bg_systray    = theme.bg_normal
@@ -170,7 +171,7 @@ theme.wallpaper = function(s)
 end
 --]]
 
-theme.wallpaper = "~/.config/awesome/images/tron.png"
+theme.wallpaper = "~/.config/awesome/wallpaper/neondrive.jpg"
 
 return theme
 

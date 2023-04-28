@@ -52,6 +52,17 @@ local capi = {
 
 local timer = require("gears.timer")
 
+-- Streetturtle widgets
+local streetturtle_cpu_widget = require("awesome-wm-widgets.cpu-widget.cpu-widget")
+local streetturtle_net_speed_widget = require("awesome-wm-widgets.net-speed-widget.net-speed")
+local streetturtle_ram_widget = require("awesome-wm-widgets.ram-widget.ram-widget")
+local streetturtle_brightness_widget = require("awesome-wm-widgets.brightness-widget.brightness")
+local streetturtle_battery_widget = require("awesome-wm-widgets.battery-widget.battery")
+local streetturtle_weather_widget = require("awesome-wm-widgets.weather-widget.weather")
+local streetturtle_calendar_widget = require("awesome-wm-widgets.calendar-widget.calendar")
+local streetturtle_github_contributions_widget = require("awesome-wm-widgets.github-contributions-widget.github-contributions-widget")
+local streetturtle_todo_widget = require("awesome-wm-widgets.todo-widget.todo")
+
 -- do not use letters, which shadow access key to menu entry
 awful.menu.menu_keys.down = { "Down", ".", ">", "'", "\"", }
 awful.menu.menu_keys.up = {  "Up", ",", "<", ";", ":", }
@@ -1858,7 +1869,7 @@ awful.button({ }, 1, function (c)
     if c == client.focus then
         c.minimized = true
     else
-        -- Without this, the following
+        -- Without this, the followingcustomization.func.clients_on_tag()
         -- :isvisible() makes no sense
         c.minimized = false
         if not c:isvisible() then
@@ -1981,17 +1992,48 @@ function(s)
         customization.widgets.tasklist[s], -- Middle widget
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
+            streetturtle_github_contributions_widget{
+                username = 'syndr',
+                color_of_empty_cells = "#00000000",
+            },
             customization.widgets.separator,
             customization.widgets.keyboardlayout,
             wibox.widget.systray(),
             customization.widgets.separator,
-            customization.widgets.cpuusage,
+            --customization.widgets.cpuusage,
+            streetturtle_cpu_widget(),
+            streetturtle_ram_widget(),
             customization.widgets.memusage,
+            streetturtle_net_speed_widget(),
+            customization.widgets.separator,
+            streetturtle_brightness_widget{
+                type = 'icon_and_text',
+                rmb_set_max = true,
+            },
+            streetturtle_battery_widget{
+                path_to_icons = '/home/syndr@styx.ultroncore.net/.icons/Abyss-ENVY-Suru-GLOW/status/symbolic/',
+                show_current_level = true,
+            },
             customization.widgets.separator,
             --customization.widgets.bat,
             --customization.widgets.mpdstatus,
             customization.widgets.volume,
             customization.widgets.separator,
+            streetturtle_weather_widget{
+                api_key='e9b1c7fd8c1e8683b46add4b50b0d3ca',
+                coordinates = {38.8538, -104.8558},
+                time_format_12h = true,
+                units = 'imperial',
+                both_units_widget = true,
+                font_name = 'Carter One',
+                icons = 'VitalyGorbachev',
+                icons_extension = '.svg',
+                show_hourly_forecast = true,
+                show_daily_forecast = true,
+                timeout = 600,
+            },
+            customization.widgets.separator,
+            streetturtle_todo_widget(),
             customization.widgets.date,
             customization.widgets.separator,
             customization.widgets.layoutbox[s],
@@ -2016,13 +2058,17 @@ function(s)
             --customization.widgets.keyboardlayout,
             --wibox.widget.systray(),
             customization.widgets.separator,
-            customization.widgets.cpuusage,
+            --customization.widgets.cpuusage,
+            streetturtle_cpu_widget(),
+            streetturtle_ram_widget(),
             customization.widgets.memusage,
+            streetturtle_net_speed_widget(),
             --customization.widgets.bat,
             --customization.widgets.mpdstatus,
             customization.widgets.separator,
             customization.widgets.volume,
             customization.widgets.separator,
+            streetturtle_todo_widget(),
             customization.widgets.date,
             customization.widgets.separator,
             customization.widgets.layoutbox[s],
@@ -2961,6 +3007,11 @@ clientbuttons = awful.util.table.join(
     awful.button({ modkey }, 1, awful.mouse.client.move),
     awful.button({ modkey }, 3, awful.mouse.client.resize),
 
+    --awful.button({ }, 12, 
+    --    function(c)
+    --        customization.func.all_clients()
+    --    end
+    --    ),
     -- Allow switching workspaces with extra mouse function buttons
     awful.button({ }, 11, 
         function()
@@ -3070,15 +3121,25 @@ client.connect_signal("manage", function (c, startup)
 
         -- Put windows in a smart way, only if they does not set an initial position.
         if not c.size_hints.user_position and not c.size_hints.program_position then
+            awful.placement.under_mouse(c)
             awful.placement.no_overlap(c)
             awful.placement.no_offscreen(c)
-            awful.placement.under_mouse(c)
         end
     end
 
     local titlebars_enabled = true
     if titlebars_enabled and (c.type == "normal" or c.type == "dialog") then
 
+        -- center titlebar shape
+        local function trapeze(cr, width, height)
+            cr:move_to(height,0)
+            cr:line_to(width-height,0)
+            cr:line_to(width,height)
+            cr:line_to(0, height)
+            cr:line_to(height, 0)
+            cr:close_path()
+        end
+        
         -- buttons for the titlebar
         local buttons = awful.util.table.join(
         awful.button({ }, 1, function()

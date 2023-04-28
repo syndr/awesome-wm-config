@@ -1,0 +1,9 @@
+[submodule "awesome-wm-widgets"]
+	path = awesome-wm-widgets
+	url = https://github.com/streetturtle/awesome-wm-widgets.git
+[submodule "json.lua"]
+	path = json.lua
+	url = https://github.com/rxi/json.lua.git
+[submodule "rxi-json.lua"]
+	path = rxi-json.lua
+	url = https://github.com/rxi/json.lua.git
