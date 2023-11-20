@@ -264,7 +264,7 @@ do
     --{{
     function customization.func.change_wallpaper()
         if customization.option.wallpaper_change_p then
-            awful.spawn.with_shell("cd " .. config_path .. "/wallpaper/; ./my-wallpaper-pick.sh")
+            awful.spawn.with_shell("nitrogen --restore")
         end
     end
 
@@ -2017,6 +2017,7 @@ function(s)
             streetturtle_battery_widget{
                 path_to_icons = '/home/syndr@styx.ultroncore.net/.icons/Abyss-ENVY-Suru-GLOW/status/symbolic/',
                 show_current_level = true,
+                display_notification = true,
             },
             customization.widgets.separator,
             --customization.widgets.bat,
