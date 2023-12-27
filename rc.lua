@@ -100,10 +100,10 @@ customization.default.property = {
 }
 
 customization.default.compmgr = 'picom'
-customization.default.compmgr_args = '-b --unredir-if-possible --no-fading-openclose'
+customization.default.compmgr_args = '-b'
 customization.default.wallpaper_change_interval = 3600
 
-customization.option.wallpaper_change_p = false
+customization.option.wallpaper_change_p = true
 customization.option.launch_compmgr_p = true
 customization.option.tag_persistent_p = true
 customization.option.low_battery_notification_p = true
@@ -3085,6 +3085,13 @@ awful.rules.rules = {
 
     {
         rule = { class = "copyq" },
+        properties = {
+            floating = true,
+        },
+    },
+
+    {
+        rule = { class = "zoom" },
         properties = {
             floating = true,
         },

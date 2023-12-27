@@ -171,7 +171,7 @@ theme.wallpaper = function(s)
 end
 --]]
 
-theme.wallpaper = "~/.config/awesome/wallpaper/neondrive.jpg"
+theme.wallpaper = "~/.config/awesome/wallpaper/futuristic-city-cyberpunk.jpg"
 
 return theme
 
