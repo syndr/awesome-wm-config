@@ -1974,7 +1974,7 @@ function(s)
         )
 
     -- Bluetooth widget
-    local widget_bluetooth = require("gobo.awesome.bluetooth")
+    --local widget_bluetooth = require("gobo.awesome.bluetooth")
 
     -- Create the wibox
     customization.widgets.wibox_top[s] = awful.wibar({ position = "top", screen = s, visible = false })
@@ -2041,7 +2041,7 @@ function(s)
             streetturtle_todo_widget(),
             customization.widgets.date,
             customization.widgets.separator,
-            widget_bluetooth.new(),
+            --widget_bluetooth.new(),
             wibox.widget.systray(),
             customization.widgets.separator,
             customization.widgets.layoutbox[s],
